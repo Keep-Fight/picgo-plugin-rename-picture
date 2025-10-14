@@ -1,5 +1,4 @@
-import picgo from 'picgo';
-declare const _default: (ctx: picgo) => {
+declare const _default: (ctx: any) => {
     register: () => void;
     config: (ctx: any) => {
         name: string;

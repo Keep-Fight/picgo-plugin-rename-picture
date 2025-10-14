@@ -4,6 +4,17 @@ const crypto = require('crypto');
 function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
+function getPaths(inputText) {
+    // tslint:disable-next-line:no-multi-spaces
+    let fullPath = decodeURIComponent(inputText);
+    if (fullPath.indexOf('/') !== -1) {
+        return fullPath.split('/');
+    }
+    if (fullPath.indexOf('\\') !== -1) {
+        return fullPath.split('\\');
+    }
+    return fullPath.split(path.sep);
+}
 const pluginConfig = ctx => {
     let userConfig = ctx.getConfig('picgo-plugin-rename-file');
     if (!userConfig) {
@@ -59,7 +70,7 @@ module.exports = (ctx) => {
                             .replace(/{(localFolder:?(\d+)?)}/gi, (result, key, count) => {
                             if (ctx.input[i]) {
                                 count = Math.max(1, (count || 0));
-                                let paths = path.dirname(ctx.input[i]).split(path.sep);
+                                let paths = getPaths(path.dirname(ctx.input[i]));
                                 key = paths.slice(0 - count).reduce((a, b) => `${a}/${b}`);
                             }
                             return key.replace(/:/g, '');
@@ -72,7 +83,7 @@ module.exports = (ctx) => {
                             }
                         })
                             // 字符串替换
-                            .replace(/{(hash|origin|\w+)}/gi, (result, key) => {
+                            .replace(/{(hash|origin|folderName|\w+)}/gi, (result, key) => {
                             // 文件原名
                             if (key === 'origin') {
                                 return fileName.substring(0, Math.max(0, fileName.lastIndexOf('.')) || fileName.length)
@@ -83,6 +94,12 @@ module.exports = (ctx) => {
                                 const hash = crypto.createHash('md5');
                                 hash.update(item.buffer);
                                 return hash.digest('hex');
+                            }
+                            if (key === 'folderName') {
+                                // @ts-ignore
+                                let dirname = path.dirname(ctx.input[i]);
+                                let paths = getPaths(dirname);
+                                return paths[paths.length - 1];
                             }
                             return key;
                         })

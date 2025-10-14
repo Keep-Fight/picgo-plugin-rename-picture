@@ -1,13 +1,10 @@
-## picgo-plugin-rename-file
+## picgo-plugin-rename-picture
 
 
 
 A PicGo plugin for customizing file name.
 
 可以很自定义生成文件存储路径的插件，文件(包括路径)名称支持日期、随机字符串、文件MD5、原文件名、原文件目录结构等规则。
-
-更多需求，欢迎PR或提ISSUE。
-
 
 ---
 
@@ -25,7 +22,7 @@ A PicGo plugin for customizing file name.
 format，文件(路径)格式，默认为空，自定义文件路径及文件名，例如：
 
     fix-dir/{localFolder:2}/{y}/{m}/{d}/{h}-{i}-{s}-{hash}-{origin}-{rand:6}
-    
+
 上传文件名为`/images/test/localImage.jpg`的文件时，会重命名为
 
     fix-dir/images/test/2020/07/24/21-40-31-36921a9c364ed4789d4bc684bcb81d62-localImage-fa2c97.jpg
@@ -40,18 +37,10 @@ format，文件(路径)格式，默认为空，自定义文件路径及文件名
 - {h} 小时，2位
 - {i} 分钟，2位
 - {s} 秒，2位
-- {ms} 毫秒，3位(**v1.0.4**)
-- {timestamp} 时间戳(秒)，10位(**v1.0.4**)
+- {ms} 毫秒，3位
+- {timestamp} 时间戳(秒)，10位
 - {hash}，文件的md5值，32位
 - {origin}，文件原名（会去掉后缀）
 - {rand:&lt;count&gt;}, 随机数，&lt;count&gt;表示个数，默认为6个，示例：{rand：32}、{rand}
 - {localFolder:&lt;count&gt;}, &lt;count&gt;表示层级 ，默认为1，示例：{localFolder:6}、{localFolder}
-
-
----
-### 版权声明
-
-MIT
-
-从 [gclove/picgo-plugin-super-prefix](https://github.com/gclove/picgo-plugin-super-prefix) fork而来，
-做了些修改。
+- {folderName}，文件所在目录的文件名
