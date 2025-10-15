@@ -16,7 +16,7 @@ function getPaths(inputText) {
     return fullPath.split(path.sep);
 }
 const pluginConfig = ctx => {
-    let userConfig = ctx.getConfig('picgo-plugin-rename-file');
+    let userConfig = ctx.getConfig('picgo-plugin-rename-picture');
     if (!userConfig) {
         userConfig = {};
     }
@@ -33,19 +33,19 @@ const pluginConfig = ctx => {
 };
 module.exports = (ctx) => {
     const register = () => {
-        ctx.helper.beforeUploadPlugins.register('rename-file', {
+        ctx.helper.beforeUploadPlugins.register('rename-picture', {
             handle: async function (ctx) {
                 // console.log(ctx)
                 const autoRename = ctx.getConfig('settings.autoRename');
                 if (autoRename) {
                     ctx.emit('notification', {
                         title: '❌ 警告',
-                        body: '请关闭 PicGo 的 【时间戳重命名】 功能,\nrename-file 插件重命名方式会被覆盖'
+                        body: '请关闭 PicGo 的 【时间戳重命名】 功能,\nrename-picture 插件重命名方式会被覆盖'
                     });
                     await sleep(10000);
-                    throw new Error('rename-file conflict');
+                    throw new Error('rename-picture conflict');
                 }
-                const format = ctx.getConfig('picgo-plugin-rename-file.format') || '';
+                const format = ctx.getConfig('picgo-plugin-rename-picture.format') || '';
                 ctx.output = ctx.output.map((item, i) => {
                     let fileName = item.fileName;
                     if (format) {
@@ -95,6 +95,7 @@ module.exports = (ctx) => {
                                 hash.update(item.buffer);
                                 return hash.digest('hex');
                             }
+                            // 文件的父级文件夹名称
                             if (key === 'folderName') {
                                 // @ts-ignore
                                 let dirname = path.dirname(ctx.input[i]);
